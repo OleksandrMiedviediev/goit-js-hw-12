@@ -1,7 +1,7 @@
 import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
 export function showLoader(container) {
   const loader = document.createElement('span');
   loader.classList.add('loader');
@@ -16,11 +16,7 @@ export function hideLoader(loader) {
 
 export function renderGallery(data, gallery) {
   if (data.hits.length === 0) {
-    iziToast.error({
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-      position: 'topRight',
-    });
+    showSearchErrorMessage();
   } else {
     const markup = data.hits
       .map(item => {

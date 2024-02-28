@@ -1,9 +1,11 @@
+import iziToast from 'izitoast';
 import { searchImages } from './js/pixabay-api';
 import {
   showLoader,
   hideLoader,
   renderGallery,
 } from './js/render-functions.js';
+window.iziToast = iziToast;
 
 const form = document.querySelector('.form');
 const gallery = document.querySelector('.gallery');
@@ -31,7 +33,6 @@ form.addEventListener('submit', async e => {
     return;
   }
 
-  hideLoader(loader);
   showLoader(loader);
   gallery.innerHTML = '';
 
@@ -44,16 +45,12 @@ form.addEventListener('submit', async e => {
       loadMoreButton.style.display = 'block';
     } else {
       loadMoreButton.style.display = 'none';
+      showEndMessage();
     }
-
-    // Відновлюємо позицію прокрутки після додавання нових зображень
-    window.scrollTo({
-      top: currentScrollY + gallery.lastElementChild.clientHeight,
-      behavior: 'smooth',
-    });
   } catch (error) {
     iziToast.error({
-      message: 'An error occurred. Please try again later.',
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
       position: 'topRight',
     });
   } finally {
@@ -74,17 +71,16 @@ loadMoreButton.addEventListener('click', async () => {
       loadMoreButton.style.display = 'block';
     } else {
       loadMoreButton.style.display = 'none';
+      showEndMessage();
     }
 
-    // Відновлюємо позицію прокрутки після додавання нових зображень
     window.scrollTo({
       top: currentScrollY + gallery.lastElementChild.clientHeight,
       behavior: 'smooth',
     });
   } catch (error) {
     iziToast.error({
-      message:
-        'An error occurred while loading more images. Please try again later.',
+      message: "We're sorry, but you've reached the end of search results.",
       position: 'topRight',
     });
   } finally {
